@@ -3,9 +3,9 @@ use Mix.Config
 # Configure your database
 config :skul, Skul.Repo,
   username: "postgres",
-  password: "postgres",
+  password: "admin",
   database: "skul_dev",
-  hostname: "localhost",
+  hostname: "docker.lo",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
