@@ -14,7 +14,12 @@ defmodule SkulWeb.Router do
   end
 
   pipeline :protected do
-    plug :ensure_authenticated
+    plug :check_auth
+  end
+
+  pipeline :admin do
+    plug :check_auth
+    plug :check_admin
   end
 
   pipeline :api do
@@ -47,9 +52,9 @@ defmodule SkulWeb.Router do
     end
   end
 
-  def ensure_authenticated(%{assigns: %{user: _}} = conn, _), do: conn
+  def check_auth(%{assigns: %{user: _}} = conn, _), do: conn
 
-  def ensure_authenticated(
+  def check_auth(
     %{request_path: request_path, query_string: query_string} = conn,
     _
   ) do
@@ -58,6 +63,18 @@ defmodule SkulWeb.Router do
     |> put_session(:redirect_url, redirect_url)
     |> put_flash(:login, "Please login before accessing the page.")
     |> redirect(to: "/")
+  end
+
+  def check_admin(conn, _) do
+    with %{assigns: %{user: user}} when not is_nil(user) <- conn,
+        1 <- user.id do
+      conn
+    else
+      _ ->
+        conn
+        |> put_flash(:error, "Access denied")
+        |> redirect(to: "/")
+    end
   end
 
   # Other scopes may use custom stacks.
@@ -76,7 +93,7 @@ defmodule SkulWeb.Router do
     import Phoenix.LiveDashboard.Router
 
     scope "/" do
-      pipe_through :browser
+      pipe_through [:browser, :admin]
       live_dashboard "/dashboard", metrics: SkulWeb.Telemetry
     end
   end
