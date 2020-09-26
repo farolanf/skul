@@ -4,10 +4,10 @@ defmodule Skul.Email do
 
   def welcome_email(attrs) do
     base_email(
-      to: Keyword.get(attrs, :to),
+      to: attrs[:to],
       subject: "Selamat datang di skul.id!"
     )
-    |> render(:welcome, %{to: Keyword.get(attrs, :to), name: Keyword.get(attrs, :name)})
+    |> render(:welcome, %{to: attrs[:to], name: attrs[:name]})
   end
 
   defp base_email(attrs) do
