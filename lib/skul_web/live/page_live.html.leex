@@ -6,3 +6,7 @@
     Yay! We got a new site setup!
   </div>
 </article>
+
+<%= if @live_action in [:login, :register] do %>
+  <%= live_component @socket, SkulWeb.LoginComponent, Map.merge(assigns, %{id: :login}) %>
+<% end %>

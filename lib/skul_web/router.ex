@@ -10,6 +10,17 @@ defmodule SkulWeb.Router do
     plug :put_secure_browser_headers
   end
 
+  pipeline :protected do
+    plug :accepts, ["html"]
+    plug :fetch_session
+    plug :fetch_live_flash
+    plug :put_root_layout, {SkulWeb.LayoutView, :root}
+    plug :protect_from_forgery
+    plug :put_secure_browser_headers
+    plug :load_user
+    plug :ensure_authenticated
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -18,6 +29,33 @@ defmodule SkulWeb.Router do
     pipe_through :browser
 
     live "/", PageLive, :index
+    live "/login", PageLive, :login
+    live "/register", PageLive, :register
+  end
+
+  scope "/", SkulWeb do
+    pipe_through :protected
+
+    live "/profile", PageLive, :profile
+  end
+
+  def load_user(conn, arg) do
+    IO.inspect conn, label: "conn"
+    IO.inspect arg, label: "arg"
+    conn
+  end
+
+  def ensure_authenticated(%{assigns: %{user: _}} = conn, _), do: conn
+
+  def ensure_authenticated(
+    %{request_path: request_path, query_string: query_string} = conn,
+    _
+  ) do
+    redirect_url = "#{request_path}?#{query_string}"
+    conn
+    |> put_session(:redirect_url, redirect_url)
+    |> put_flash(:login, "Please login before accessing the page.")
+    |> redirect(to: "/")
   end
 
   # Other scopes may use custom stacks.

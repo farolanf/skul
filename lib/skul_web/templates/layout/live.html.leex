@@ -1,3 +1,4 @@
+<%= live_component @socket, SkulWeb.TopbarComponent, Map.merge(assigns, %{id: :topbar}) %>
 <main role="main" class="container">
   <%= if live_flash(@flash, :info) do %>
     <p class="notification is-info mt-5" role="alert"
@@ -8,6 +9,11 @@
     <p class="notification is-danger mt-5" role="alert"
       phx-click="lv:clear-flash"
       phx-value-key="error"><%= live_flash(@flash, :error) %></p>
+  <% end %>
+  <%= if live_flash(@flash, :login) do %>
+    <p class="notification is-danger mt-5" role="alert"
+      phx-click="lv:clear-flash"
+      phx-value-key="error"><%= live_flash(@flash, :login) %> <%= live_redirect "Login", to: Routes.page_path(@socket, :login), class: "link" %></p>
   <% end %>
   <%= @inner_content %>
 </main>
