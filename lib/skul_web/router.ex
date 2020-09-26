@@ -1,6 +1,8 @@
 defmodule SkulWeb.Router do
   use SkulWeb, :router
 
+  alias Skul.Accounts
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -8,16 +10,10 @@ defmodule SkulWeb.Router do
     plug :put_root_layout, {SkulWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :load_user
   end
 
   pipeline :protected do
-    plug :accepts, ["html"]
-    plug :fetch_session
-    plug :fetch_live_flash
-    plug :put_root_layout, {SkulWeb.LayoutView, :root}
-    plug :protect_from_forgery
-    plug :put_secure_browser_headers
-    plug :load_user
     plug :ensure_authenticated
   end
 
@@ -29,20 +25,26 @@ defmodule SkulWeb.Router do
     pipe_through :browser
 
     live "/", PageLive, :index
+
     live "/login", PageLive, :login
     live "/register", PageLive, :register
+    post "/session/new", SessionController, :new
+    delete "/logout", SessionController, :delete
   end
 
   scope "/", SkulWeb do
-    pipe_through :protected
+    pipe_through [:browser, :protected]
 
     live "/profile", PageLive, :profile
   end
 
-  def load_user(conn, arg) do
-    IO.inspect conn, label: "conn"
-    IO.inspect arg, label: "arg"
-    conn
+  def load_user(conn, _) do
+    with user_id when not is_nil(user_id) <- get_session(conn, :user_id),
+        user when not is_nil(user) <- Accounts.get_user(user_id) do
+      conn |> assign(:user, user)
+    else
+      _ -> conn |> delete_session(:user_id)
+    end
   end
 
   def ensure_authenticated(%{assigns: %{user: _}} = conn, _), do: conn

@@ -1,8 +1,11 @@
 defmodule SkulWeb.PageLive do
   use SkulWeb, :live_view
 
+  alias SkulWeb.Helper
+
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
+    socket = Helper.assign_defaults(session, socket)
     {:ok, assign(socket, query: "", results: %{})}
   end
 
