@@ -7,11 +7,13 @@
         </div>
       <% end %>
       <%= if assigns[:user] do %>
-        <div class="navbar-item">
-          <%= live_redirect "Profile", to: Routes.page_path(@socket, :profile), class: "link has-text-light" %>
-        </div>
-        <div class="navbar-item">
-          <%= link "Logout", to: Routes.session_path(@socket, :delete), method: :delete, class: "link has-text-light" %>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">Akun</a>
+          <div class="navbar-dropdown is-right">
+            <div class="navbar-item has-text-grey"><%= @user.email %></div>
+            <%= live_redirect "Profile", to: Routes.page_path(@socket, :profile), class: "navbar-item" %>
+            <%= link "Logout", to: Routes.session_path(@socket, :delete), method: :delete, class: "navbar-item" %>
+          </div>
         </div>
       <% else %>
         <div class="navbar-item">
