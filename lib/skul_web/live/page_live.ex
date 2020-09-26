@@ -10,6 +10,13 @@ defmodule SkulWeb.PageLive do
   end
 
   @impl true
+  def handle_event("test_email", _params, socket) do
+    Skul.Email.welcome_email(to: "some1@test.com", name: "budi")
+    |> Skul.Mailer.deliver_now()
+    {:noreply, socket}
+  end
+
+  @impl true
   def handle_event("suggest", %{"q" => query}, socket) do
     {:noreply, assign(socket, results: search(query), query: query)}
   end

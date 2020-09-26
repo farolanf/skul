@@ -18,6 +18,12 @@ config :skul, SkulWeb.Endpoint,
   pubsub_server: Skul.PubSub,
   live_view: [signing_salt: "OWOpt9+J"]
 
+config :skul, Skul.Mailer,
+  adapter: Bamboo.SMTPAdapter,
+  server: "docker.lo",
+  hostname: "skul.id",
+  port: 1025
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
