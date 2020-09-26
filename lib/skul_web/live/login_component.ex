@@ -7,13 +7,25 @@ defmodule SkulWeb.LoginComponent do
   @impl true
   def mount(socket) do
     {:ok, socket
-      |> assign(register: %{})
+      |> assign(login: %{}, register: %{})
     }
   end
 
   @impl true
   def handle_event(event, params, socket) do
     {:noreply, do_event(event, params, socket)}
+  end
+
+  def do_event("validate", %{"login" => %{"email" => email, "password" => password}} = params, socket) do
+    socket = socket
+    |> assign(login: params["login"])
+    |> assign(valid: false)
+    |> clear_flash()
+    cond do
+      String.length(email) > 0 and String.length(password) > 0 ->
+        socket |> assign(valid: true)
+      true -> socket
+    end
   end
 
   def do_event("validate", %{"register" => %{"email" => email, "password" => password, "password_confirmation" => password_confirmation}} = params, socket) do
@@ -36,8 +48,16 @@ defmodule SkulWeb.LoginComponent do
     end
   end
 
-  def do_event("login", %{"login" => %{"email" => _email, "password" => _password}}, socket) do
-    socket
+  def do_event("login", %{"login" => %{"email" => email, "password" => password}}, socket) do
+    with user when not is_nil(user) <- Accounts.get_user_by_email(email),
+        true <- Bcrypt.verify_pass(password, user.password) do
+      socket
+      |> redirect(to: "/")
+    else
+      _ ->
+        Bcrypt.no_user_verify()
+        socket |> put_flash(:error, "Akun tidak ditemukan")
+    end
   end
 
   def do_event("register", %{"register" => %{"email" => email, "password" => password, "password_confirmation" => password_confirmation}}, socket) do
