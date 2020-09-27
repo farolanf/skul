@@ -2,7 +2,7 @@
   <nav role="navigation" class="navbar is-info">
     <div class="navbar-end">
       <div class="navbar-item">
-        <%= link "Test email", to: "", class: "has-text-light", phx_click: :test_email %>
+        <%= content_tag :a, "Test email", class: "has-text-light", phx_click: :test_email %>
       </div>
       <%= if function_exported?(Routes, :live_dashboard_path, 2) and assigns[:user] |> can?(:view, :live_dashboard) do %>
         <div class="navbar-item">

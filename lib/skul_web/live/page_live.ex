@@ -11,9 +11,15 @@ defmodule SkulWeb.PageLive do
 
   @impl true
   def handle_event("test_email", _params, socket) do
-    Skul.Email.welcome_email(to: "some1@test.com", name: "budi")
-    |> Skul.Mailer.deliver_now()
-    {:noreply, socket}
+    if socket.assigns[:user] |> can?(:send, :test_email) do
+      Skul.Email.welcome_email(to: "some1@test.com", name: "budi")
+      |> Skul.Mailer.deliver_now()
+      {:noreply, socket |> put_flash(:success, "Email sent!")}
+    else
+      socket = socket
+      |> put_flash(:error, "Access denied")
+      {:noreply, socket}
+    end
   end
 
   @impl true
