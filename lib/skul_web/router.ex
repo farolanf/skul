@@ -1,6 +1,8 @@
 defmodule SkulWeb.Router do
   use SkulWeb, :router
 
+  import Can
+
   alias Skul.Accounts
 
   pipeline :browser do
@@ -67,7 +69,7 @@ defmodule SkulWeb.Router do
 
   def check_admin(conn, _) do
     with %{assigns: %{user: user}} when not is_nil(user) <- conn,
-        1 <- user.id do
+        true <- user |> can?(:admin, :admin) do
       conn
     else
       _ ->

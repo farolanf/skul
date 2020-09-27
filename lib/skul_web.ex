@@ -87,6 +87,8 @@ defmodule SkulWeb do
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View
 
+      import Can
+
       import SkulWeb.ErrorHelpers
       import SkulWeb.Gettext
       alias SkulWeb.Router.Helpers, as: Routes
