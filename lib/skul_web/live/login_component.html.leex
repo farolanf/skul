@@ -13,7 +13,7 @@
           <div class="field">
             <label class="label">Email</label>
             <div class="control">
-              <%= email_input f, :email, class: "input", placeholder: "Email", autocomplete: "email", value: @login["email"], phx_debounce: 300 %>
+              <%= email_input f, :email, class: "input", placeholder: "Email", autocomplete: "email", value: @login["email"], phx_debounce: 300, phx_hook: "autofocus" %>
             </div>
           </div>
           <div class="field">
@@ -47,7 +47,7 @@
           <div class="field">
             <label class="label">Email</label>
             <div class="control">
-              <%= email_input f, :email, class: "input", placeholder: "Email", value: @register["email"], phx_debounce: 300 %>
+              <%= email_input f, :email, class: "input", placeholder: "Email", value: @register["email"], phx_debounce: 300, phx_hook: "autofocus" %>
             </div>
             <%= if live_flash(@flash, :email) do %>
               <div class="help is-danger"><%= live_flash(@flash, :email) %></div>
