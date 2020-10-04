@@ -11,8 +11,8 @@ defmodule SkulWeb.RoomLive do
 
   @impl true
   def handle_event("get_token", _params, socket) do
-    socket = socket
-    |> assign(session_token: Openvidu.get_token("SessionA"))
+    token = Openvidu.get_token("SessionA")
+    socket = push_event(socket, "openvidu_token", %{token: token})
     {:noreply, socket}
   end
 
