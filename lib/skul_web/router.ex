@@ -37,6 +37,9 @@ defmodule SkulWeb.Router do
     live "/register", PageLive, :register
     post "/session/new", SessionController, :new
     delete "/logout", SessionController, :delete
+
+    live "/sekolah/:slug", SkulLive, :show
+    live "/sekolah/:slug/ruang/:room_slug", RoomLive, :show
   end
 
   scope "/", SkulWeb do

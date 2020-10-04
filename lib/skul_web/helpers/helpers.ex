@@ -1,4 +1,4 @@
-defmodule SkulWeb.Helper do
+defmodule SkulWeb.Helpers do
 
   import Phoenix.LiveView
 

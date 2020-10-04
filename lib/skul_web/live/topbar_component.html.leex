@@ -1,5 +1,18 @@
 <header>
   <nav role="navigation" class="navbar is-info">
+    <div class="navbar-brand">
+      <div class="navbar-item">
+        <%= live_redirect "SkulDaring", to: Routes.page_path(@socket, :index), class: "has-text-light" %>
+      </div>
+    </div>
+    <div class="navbar-start">
+      <div class="navbar-item">
+        <%= live_redirect "Contoh Sekolah", to: Routes.skul_path(@socket, :show, "sd-contoh"), class: "has-text-light" %>
+      </div>
+      <div class="navbar-item">
+        <%= live_redirect "Contoh Kelas", to: Routes.room_path(@socket, :show, "sd-contoh", "kelas-1a"), class: "has-text-light" %>
+      </div>
+    </div>
     <div class="navbar-end">
       <div class="navbar-item">
         <%= content_tag :a, "Test email", class: "has-text-light", phx_click: :test_email %>

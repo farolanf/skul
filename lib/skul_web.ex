@@ -89,6 +89,7 @@ defmodule SkulWeb do
 
       import Can
 
+      import SkulWeb.Helpers
       import SkulWeb.ErrorHelpers
       import SkulWeb.Gettext
       alias SkulWeb.Router.Helpers, as: Routes
