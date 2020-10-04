@@ -49,7 +49,8 @@ defmodule Skul.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:bcrypt_elixir, "~> 2.2"},
       {:bamboo, "~> 1.5"},
-      {:bamboo_smtp, "~> 3.0"}
+      {:bamboo_smtp, "~> 3.0"},
+      {:httpoison, "~> 1.7"}
     ]
   end
 

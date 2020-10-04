@@ -65,6 +65,11 @@ config :skul, SkulWeb.Endpoint,
     ]
   ]
 
+config :skul, :openvidu,
+  url: "https://docker.lo:4443",
+  user: "OPENVIDUAPP",
+  password: "secret"
+
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
 
