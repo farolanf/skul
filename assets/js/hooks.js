@@ -12,6 +12,14 @@ export default {
       
       const session = openVidu.initSession()
 
+      this._openviduDestroy = () => {
+        session.disconnect()
+      };
+
+      window.addEventListener('beforeunload', e => {
+        this._openviduDestroy()
+      })
+
       session.on('streamCreated', event => {
         session.subscribe(event.stream, 'other-streams')
       })
@@ -31,6 +39,12 @@ export default {
         })
         session.publish(publisher)
       })
+    },
+    disconnected() {
+      this._openviduDestroy && this._openviduDestroy()
+    },
+    beforeDestroy() {
+      this._openviduDestroy && this._openviduDestroy()
     }
   }
 }
