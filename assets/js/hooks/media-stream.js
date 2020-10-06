@@ -1,52 +1,25 @@
-import React, { useState, useEffect } from 'react'
-import ReactDOM from 'react-dom'
-import { useGlobalKey } from '../store'
-
-const DeviceSelect = ({ devices, value, onChange }) => (
-  devices.length > 0 && (
-    <select onChange={e => onChange(e.target.value)} value={value}>
-      {devices.map(dev => (
-        <option key={dev.deviceId} value={dev.deviceId}>{dev.label}</option>
-      ))}
-    </select> 
-  )
-)
-
-const MediaSelect = ({ phx }) => {
-  const [state, actions] = useGlobalKey('mediaStream')
-  const [videoInputs, setVideoInputs] = useState([])
-  const [audioInputs, setAudioInputs] = useState([])
-
-  useEffect(() => {
-    navigator.mediaDevices.enumerateDevices()
-      .then(devices => {
-        setVideoInputs(devices.filter(dev => dev.kind === 'videoinput'))
-        setAudioInputs(devices.filter(dev => dev.kind === 'audioinput'))
-      })
-  }, [])
-
-  const testEvent = () => {
-    phx.pushEvent('test-event', { name: 'test' }, reply => {
-      console.log('reply', reply)
-    })
-  }
-
-  return (
-    <div>
-      <button onClick={testEvent}>test event</button>
-      <label>
-        Video
-        <DeviceSelect devices={videoInputs} value={state.videoDeviceId} onChange={actions.setVideoDevice} />
-      </label>
-      <label>
-        Audio
-        <DeviceSelect devices={audioInputs} value={state.audioDeviceId} onChange={actions.setAudioDevice} />
-      </label>
-    </div>
-  )
-}
+let videoDeviceId
+let audioDeviceId
 
 export default {
+  videoSelect: {
+    mounted() {
+      navigator.mediaDevices.enumerateDevices()
+        .then(devices => {
+          this.el.querySelectorAll('option').remove()
+          devices.forEach(dev => {
+            if (dev.kind === 'videoinput') {
+
+            }
+          })
+        })
+    }
+  },
+  audioSelect: {
+    mounted() {
+
+    }
+  },
   mediaStream: {
     mounted() {
       const videoEl = this.el.querySelector('video')
@@ -56,17 +29,6 @@ export default {
         .then(mediaStream => {
           videoEl.srcObject = mediaStream
         })
-    }
-  },
-  MediaSelect: {
-    mounted() {
-      ReactDOM.render(<MediaSelect phx={this} />, this.el)
-    },
-    updated() {
-      ReactDOM.render(<MediaSelect phx={this} />, this.el)
-    },
-    beforeUpdate() {
-      ReactDOM.unmountComponentAtNode(this.el)
     }
   }
 }
