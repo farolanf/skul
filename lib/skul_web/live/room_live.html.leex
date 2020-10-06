@@ -1,11 +1,7 @@
 <h1 class="is-size-1 is-uppercase">Room Live</h1>
 
-<button class="button is-primary" phx-click="get_token">Get token</button>
+<div id="media-select" phx-hook="MediaSelect"></div>
 
-<h2 class="is-size-4">Token: <%= assigns[:session_token] %></h2>
-
-<div id="openvidu-session" phx-hook="openviduSession"></div>
-
-<div id="my-stream"></div>
-
-<div id="other-streams"></div>
+<div id="my-stream" phx-hook="mediaStream">
+  <video autoplay playsinline></video>
+</div>

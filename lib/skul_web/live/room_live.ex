@@ -16,4 +16,9 @@ defmodule SkulWeb.RoomLive do
     {:noreply, socket}
   end
 
+  @impl true
+  def handle_event("test-event", _params, socket) do
+    {:reply, %{name: "ok girls!"}, socket}
+  end
+
 end
