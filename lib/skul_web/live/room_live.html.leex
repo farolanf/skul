@@ -1,32 +1,19 @@
-<h1 class="is-size-1 is-uppercase">Room Live</h1>
+<script>
+  window.currentUser = <%= raw(Jason.encode!(%{username: "user1"})) %>
+</script>
 
-<label>
-  Video
-  <select
-    id="video-select"
-    phx-hook="videoSelect"
-    x-data
-    @change="mediaStream.onVideoChange($event.target.value)"
-  ></select>
-</label>
-<label>
-  Audio
-  <select
-    id="audio-select"
-    phx-hook="audioSelect"
-    x-data
-    @change="mediaStream.onVideoChange($event.target.value)"
-  ></select>
-</label>
+<h1 class="is-size-1 is-uppercase">SD Contoh - Kelas 1A</h1>
 
-<div
-  id="my-stream"
-  phx-hook="mediaStream"
-  x-data="{show: false}"
-  @media-stream:start.window="show = true"
-  @media-stream:stop.window="show = false"
->
-  <video autoplay playsinline x-show="show"></video>
+<div class="box has-text-danger" style="height: 480px">
+Papan Media
 </div>
 
-<button class="button is-primary" x-data @click="mediaStream.stop()">Stop</button>
+<div class="level">
+  <div class="level-left">
+    <div id="other-streams"></div>
+  </div>
+  <div class="level-right">
+    <button class="button is-info" phx-click="get_token">Start Stream</button>
+    <div id="my-stream" phx-hook="openvidu"></div>
+  </div>
+</div>

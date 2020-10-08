@@ -1,72 +1,41 @@
+require('../vendors/openvidu-browser-2.15.0')
+
 export default {
-  videoSelect: {
-    mounted() {
-      navigator.mediaDevices.enumerateDevices()
-        .then(devices => {
-          devices.forEach(dev => {
-            if (dev.kind === 'videoinput') {
-              const optionEl = document.createElement('option')
-              optionEl.value = dev.deviceId
-              optionEl.innerText = dev.label
-              this.el.appendChild(optionEl)
-            }
-          })
-        })
-    }
-  },
-  audioSelect: {
-    mounted() {
-      navigator.mediaDevices.enumerateDevices()
-        .then(devices => {
-          devices.forEach(dev => {
-            if (dev.kind === 'audioinput') {
-              const optionEl = document.createElement('option')
-              optionEl.value = dev.deviceId
-              optionEl.innerText = dev.label
-              this.el.appendChild(optionEl)
-            }
-          })
-        })
-    }
-  },
-  mediaStream: {
-    state: {
-      videoDeviceId: null,
-      audioDeviceId: null,
-    },
-    onVideoChange(videoDeviceId) {
-      this.state.videoDeviceId = videoDeviceId
-      this.start()
-    },
-    onAudioChange(audioDeviceId) {
-      this.state.audioDeviceId = audioDeviceId
-      this.start()
-    },
+  openvidu: {
     mounted() {
       window.mediaStream = this
-      this.start()
-    },
-    start() {
-      const videoEl = this.el.querySelector('video')
+      window.addEventListener('beforeunload', () => this.openviduDestroy())
 
-      const constraints = { 
-        video: !this.state.videoDeviceId || {
-          deviceId: this.state.videoDeviceId
-        },
-        audio: !this.state.audioDeviceId || {
-          deviceId: this.state.audioDeviceId
-        }
-      }
-      navigator.mediaDevices.getUserMedia(constraints)
-        .then(mediaStream => {
-          videoEl.srcObject = mediaStream
+      const openvidu = new OpenVidu()
+
+      const session = this.session = openvidu.initSession()
+
+      session.on('streamCreated', event => {
+        session.subscribe(event.stream, 'other-streams')
+      })
+
+      this.handleEvent("openvidu_token", async ({ token }) => {
+        await session.connect(token, { clientData: window.currentUser.username })
+        const publisher = openvidu.initPublisher('my-stream', {
+          audioSource: undefined,
+          videoSource: undefined,
+          publishAudio: true,
+          publishVideo: true,
+          resolution: '640x480',
+          frameRate: 30,
+          insertMode: 'APPEND',
+          mirror: false
         })
-      window.dispatchEvent(new CustomEvent('media-stream:start'))
+        session.publish(publisher)
+      })
     },
-    stop() {
-      const videoEl = this.el.querySelector('video')
-      videoEl.srcObject = undefined
-      window.dispatchEvent(new CustomEvent('media-stream:stop'))
-    }
+    openviduDestroy() {
+      if (!this.session) return
+      this.session.disconnect()
+      this.session = null
+    },
+    beforeDestroy() {
+      this.openviduDestroy()
+    },
   }
 }
