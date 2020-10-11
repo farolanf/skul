@@ -24,7 +24,7 @@ defmodule SkulWeb.Endpoint do
     at: "/",
     from: :skul,
     gzip: false,
-    only: ~w(css fonts images js favicon.ico robots.txt)
+    only: ~w(css fonts images js favicon.ico robots.txt tailwind.css)
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.

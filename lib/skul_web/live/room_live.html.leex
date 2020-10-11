@@ -13,7 +13,20 @@ Papan Media
     <div id="other-streams"></div>
   </div>
   <div class="level-right">
-    <button class="button is-info" phx-click="get_token">Start Stream</button>
-    <div id="my-stream" phx-hook="openvidu"></div>
+    <div class="is-relative" x-data="{ expand: false }" @main-stream:started.window="expand = true" @main-stream:stopped.window="expand = false">
+      <button class="button" x-show="!expand" @click="mediaStream.startLocalStream()">
+        <span class="icon is-small">
+          <i class="fas fa-video"></i>
+        </span>
+      </button>
+      <div class="absolute top-0 right-0" x-show="expand">
+        <button class="button" @click="mediaStream.stopLocalStream()">
+          <span class="icon is-small">
+            <i class="far fa-times-circle"></i>
+          </span>
+        </button>
+      </div>
+      <div id="main-stream" phx-hook="openvidu" x-show="expand"></div>
+    </div>
   </div>
 </div>

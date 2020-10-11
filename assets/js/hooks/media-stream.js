@@ -1,4 +1,4 @@
-require('../vendors/openvidu-browser-2.15.0')
+require('../../vendor/openvidu-browser-2.15.0')
 
 export default {
   openvidu: {
@@ -16,7 +16,7 @@ export default {
 
       this.handleEvent("openvidu_token", async ({ token }) => {
         await session.connect(token, { clientData: window.currentUser.username })
-        const publisher = openvidu.initPublisher('my-stream', {
+        this.publisher = openvidu.initPublisher('main-stream', {
           audioSource: undefined,
           videoSource: undefined,
           publishAudio: true,
@@ -26,13 +26,26 @@ export default {
           insertMode: 'APPEND',
           mirror: false
         })
-        session.publish(publisher)
+        this.startLocalStream()
       })
+    },
+    startLocalStream() {
+      if (!this.publisher) {
+        this.pushEvent('get_token')
+        return 
+      }
+      this.session.publish(this.publisher)
+      window.dispatchEvent(new CustomEvent('main-stream:started'))
+    },
+    stopLocalStream() {
+      this.session.unpublish(this.publisher)
+      window.dispatchEvent(new CustomEvent('main-stream:stopped'))
     },
     openviduDestroy() {
       if (!this.session) return
       this.session.disconnect()
       this.session = null
+      window.dispatchEvent(new CustomEvent('main-stream:stopped'))
     },
     beforeDestroy() {
       this.openviduDestroy()
