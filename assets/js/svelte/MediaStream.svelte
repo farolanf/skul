@@ -1,8 +1,6 @@
 <script>
   export let name = '';
 
-  setTimeout(() => console.log('timeout'), 2000)
-
   function handleClick() {
     name = 'girl!'
     console.log('handleClick')
