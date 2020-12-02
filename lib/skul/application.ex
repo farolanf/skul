@@ -14,7 +14,12 @@ defmodule Skul.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Skul.PubSub},
       # Start the Endpoint (http/https)
-      SkulWeb.Endpoint
+      SkulWeb.Endpoint,
+      %{
+        id: SvelteRender,
+        start: {SvelteRender, :start_link, [[render_service_path: "#{File.cwd!()}/assets/js", pool_size: 4]]},
+        type: :supervisor
+      }
       # Start a worker by calling: Skul.Worker.start_link(arg)
       # {Skul.Worker, arg}
     ]

@@ -28,6 +28,21 @@ module.exports = (env, options) => {
     module: {
       rules: [
         {
+          test: /\.mjs$/,
+          include: /node_modules/,
+          type: 'javascript/auto'
+        },
+        {
+          test: /\.(html|svelte)$/,
+          exclude: /node_modules/,
+          use: {
+            loader: 'svelte-loader',
+            options: {
+              hotReload: true
+            }
+          }
+        },
+        {
           test: /\.js$/,
           exclude: /node_modules/,
           use: {
@@ -55,6 +70,14 @@ module.exports = (env, options) => {
       }),
       new MiniCssExtractPlugin({ filename: '../css/app.css' }),
       new CopyWebpackPlugin([{ from: 'static/', to: '../' }])
-    ]
+    ],
+    resolve: {
+      alias: {
+        svelte: path.resolve('node_modules', 'svelte')
+      },
+      extensions: ['.mjs', '.js', '.svelte'],
+      mainFields: ['svelte', 'browser', 'module', 'main'],
+      modules: ['node_modules']
+    }
   }
 };

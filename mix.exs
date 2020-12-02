@@ -50,7 +50,8 @@ defmodule Skul.MixProject do
       {:bcrypt_elixir, "~> 2.2"},
       {:bamboo, "~> 1.5"},
       {:bamboo_smtp, "~> 3.0"},
-      {:httpoison, "~> 1.7"}
+      {:httpoison, "~> 1.7"},
+      {:svelte_render, path: "./lib/svelte_render"}
     ]
   end
 

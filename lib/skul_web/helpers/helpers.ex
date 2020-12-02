@@ -1,6 +1,7 @@
 defmodule SkulWeb.Helpers do
 
   import Phoenix.LiveView
+  import Phoenix.HTML.Tag
 
   alias Skul.Accounts
 
@@ -12,6 +13,17 @@ defmodule SkulWeb.Helpers do
     else
       _ -> socket
     end
+  end
+
+  def svelte(component, %{} = props \\ %{}) when is_binary(component) do
+    html = "#{File.cwd!()}/assets/js/svelte/#{component}.svelte"
+    |> SvelteRender.render(props)
+    component_id = String.replace(component, "/", "-")
+    content_tag(:div, html,
+      id: "sveltex-#{component_id}",
+      data: [props: Jason.encode!(props)],
+      phx_update: "ignore"
+    )
   end
 
 end

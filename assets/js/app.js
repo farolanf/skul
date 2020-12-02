@@ -13,6 +13,7 @@ import "../css/app.scss"
 //     import {Socket} from "phoenix"
 //     import socket from "./socket"
 //
+import './svelte-inject'
 import 'alpinejs'
 import "phoenix_html"
 import {Socket} from "phoenix"

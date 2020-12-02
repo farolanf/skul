@@ -1,0 +1,17 @@
+{
+  "name": "svelte_render",
+  "version": "3.0.0",
+  "author": "Ben Woodward <ben@terminalcoder.dev> (https://terminalcoder.dev)",
+  "license": "MIT",
+  "files": [
+    "README.md",
+    "LICENSE",
+    "package.json",
+    "./priv/server.js"
+  ],
+  "devDependencies": {
+    "svelte": "^3.5.3",
+    "svelte-loader": "^2.13.4",
+    "minimist": "^1.2.0"
+  }
+}
