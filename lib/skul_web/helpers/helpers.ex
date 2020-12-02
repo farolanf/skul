@@ -22,8 +22,7 @@ defmodule SkulWeb.Helpers do
     content_tag(:div, html,
       id: "sveltex-#{component_id}",
       data: [props: Jason.encode!(props)],
-      phx_hook: "svelte",
-      phx_update: "ignore"
+      phx_hook: "svelte"
     )
   end
 

@@ -6,6 +6,7 @@ defmodule SkulWeb.RoomLive do
   @impl true
   def mount(_params, session, socket) do
     socket = assign_defaults(session, socket)
+    |> assign(name: "world!")
     {:ok, socket}
   end
 
@@ -18,7 +19,12 @@ defmodule SkulWeb.RoomLive do
 
   @impl true
   def handle_event("test-event", _params, socket) do
-    {:reply, %{name: "ok girls!"}, socket}
+    {:noreply, %{name: "ok girls!"}, socket}
+  end
+
+  @impl true
+  def handle_event("update_name", _params, socket) do
+    {:noreply, assign(socket, name: "Girls!")}
   end
 
 end

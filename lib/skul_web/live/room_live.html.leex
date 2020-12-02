@@ -1,32 +1,7 @@
-<script>
-  window.currentUser = <%= raw(Jason.encode!(%{username: "user1"})) %>
-</script>
-
 <h1 class="is-size-1 is-uppercase">SD Contoh - Kelas 1A</h1>
 
-<div class="box has-text-danger" style="height: 480px">
-Papan Media
-</div>
+<%= svelte "MediaStream", %{name: @name} %>
 
-<div class="level">
-  <div class="level-left">
-    <div id="other-streams"></div>
-  </div>
-  <div class="level-right">
-    <div class="is-relative" x-data="{ expand: false }" @main-stream:started.window="expand = true" @main-stream:stopped.window="expand = false">
-      <button class="button" x-show="!expand" @click="mediaStream.startLocalStream()">
-        <span class="icon is-small">
-          <i class="fas fa-video"></i>
-        </span>
-      </button>
-      <div class="absolute top-0 right-0" x-show="expand">
-        <button class="button" @click="mediaStream.stopLocalStream()">
-          <span class="icon is-small">
-            <i class="far fa-times-circle"></i>
-          </span>
-        </button>
-      </div>
-      <div id="main-stream" phx-hook="openvidu" x-show="expand"></div>
-    </div>
-  </div>
-</div>
+name is <%= @name %>
+
+<button phx-click="update_name">Update</button>
