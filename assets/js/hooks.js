@@ -1,4 +1,5 @@
 import mediaStream from './hooks/media-stream'
+import svelte from './hooks/svelte'
 
 export default {
   autofocus: {
@@ -6,5 +7,6 @@ export default {
       this.el.focus()
     }
   },
+  svelte,
   ...mediaStream
 }
